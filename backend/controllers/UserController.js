@@ -2,6 +2,7 @@ const User = require("../models/User");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -83,7 +84,45 @@ const getCurrentUser = async (req, res) => {
 
 // Update an user
 const update = async (req, res) => {
-  res.send("Update");
+  const { name, password, bio } = req.body;
+
+  let profileImage = null;
+  if (req.file) {
+    profileImage = req.file.filename;
+  }
+
+  const reqUser = req.user;
+
+  try {
+    const user = await User.findById(reqUser._id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ errors: ["Usuário não encontrado."] });
+    }
+
+    if (name) {
+      user.name = name;
+    }
+
+    if (password) {
+      const salt = await bcrypt.genSalt();
+      const passwordHash = await bcrypt.hash(password, salt);
+      user.password = passwordHash;
+    }
+
+    if (profileImage) {
+      user.profileImage = profileImage;
+    }
+
+    if (bio) {
+      user.bio = bio;
+    }
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ errors: ["Erro ao atualizar usuário."] });
+  }
 };
 
 module.exports = {
