@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Shema } = mongoose;
+const Schema = mongoose.Schema; // Corrigido de "Shema" para "Schema"
 
 const photoSchema = new Schema(
   {
