@@ -102,6 +102,40 @@ const getPhotoById = async (req, res) => {
     res.status(500).json({ errors: ["Erro ao buscar foto."] });
   }
 };
+const updatePhoto = async (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+  const reqUser = req.user;
+
+ // console.log("ID recebido:", id);
+  //console.log("Título recebido:", title);
+ // console.log("Usuário autenticado:", reqUser);
+
+  try {
+    if (!title) {
+      return res.status(400).json({ errors: ["O título é obrigatório."] });
+    }
+
+    const photo = await Photo.findById(id);
+
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada."] });
+    }
+
+    if (!photo.userId.equals(reqUser._id)) {
+      return res.status(403).json({ errors: ["Você não tem permissão para atualizar esta foto."] });
+    }
+
+    photo.title = title;
+
+    await photo.save();
+
+    res.status(200).json({ photo, message: "Foto atualizada com sucesso!" });
+  } catch (error) {
+    console.error("Erro no servidor:", error);
+    res.status(500).json({ errors: ["Erro interno no servidor."] });
+  }
+};
 
 module.exports = {
   insertPhoto,
@@ -109,4 +143,5 @@ module.exports = {
   getAllPhotos,
   getUserPhotos,
   getPhotoById,
+  updatePhoto,
 };
