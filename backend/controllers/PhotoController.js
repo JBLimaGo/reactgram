@@ -61,7 +61,19 @@ const deletePhoto = async (req, res) => {
   }
 };
 
+// Get all photos
+const getAllPhotos = async (req, res) => {
+  try { 
+    const photos = await Photo.find().sort({ createdAt: -1 }).populate("userId", "name profileImage");
+    res.status(200).json(photos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errors: ["Erro ao buscar fotos."] });
+  }
+}
+
 module.exports = {
   insertPhoto,
   deletePhoto,
+  getAllPhotos,
 };
