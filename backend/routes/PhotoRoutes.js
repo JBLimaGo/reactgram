@@ -9,6 +9,7 @@ const {
   getUserPhotos,
   getPhotoById,
   updatePhoto,
+  likePhoto,
 } = require('../controllers/PhotoController');
 
 // Middlewares
@@ -31,5 +32,6 @@ router.get("/", authGuard, getAllPhotos);
 router.get("/user/:id", authGuard, getUserPhotos) // Assuming deletePhoto is defined in PhotoController 
 router.get("/:id", authGuard, getPhotoById); // Assuming getPhotoById is defined in PhotoController
 router.put("/:id", authGuard, photoUpdateValidation(), validate, updatePhoto); // Assuming updatePhoto is defined in PhotoController
+router.put("/like/:id", authGuard, likePhoto); // Assuming likePhoto is defined in PhotoController
 
 module.exports = router;

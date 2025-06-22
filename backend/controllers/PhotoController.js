@@ -137,6 +137,36 @@ const updatePhoto = async (req, res) => {
   }
 };
 
+// like
+const likePhoto = async (req, res) => {
+  const { id } = req.params;
+  const reqUser = req.user;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ errors: ["ID inválido."] });
+    }
+
+    const photo = await Photo.findById(id);
+
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada."] });
+    }
+
+    if (photo.likes.includes(reqUser._id)) {
+      return res.status(400).json({ errors: ["Você já curtiu esta foto."] });
+    }
+
+    photo.likes.push(reqUser._id);
+    await photo.save();
+
+    res.status(200).json({ photoId: id , userId: reqUser._id, message: " A Foto foi curtida com sucesso." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errors: ["Erro ao curtir a foto."] });
+  }
+};
+
 module.exports = {
   insertPhoto,
   deletePhoto,
@@ -144,4 +174,5 @@ module.exports = {
   getUserPhotos,
   getPhotoById,
   updatePhoto,
+  likePhoto,
 };
