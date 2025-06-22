@@ -167,6 +167,42 @@ const likePhoto = async (req, res) => {
   }
 };
 
+// Comment functionality 
+const commentPhoto = async (req, res) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+  const reqUser = req.user;
+
+  const user = await User.findById(reqUser._id);
+
+  const photo = await Photo.findById(id);
+
+  if (!photo) {
+    return res.status(404).json({ errors: ["Foto não encontrada."] });
+  }
+
+  // Put comment in the array comments
+  const userComment = {
+    comment,
+    userName: user.name,
+    userImage: user.profileImage,
+    userId: user._id   
+  };
+
+  photo.comments.push(userComment);
+  await photo.save();
+  res.status(200).json({ photoId: id, comment: userComment, message: "Comentário adicionado com sucesso." });
+}
+
+// Search photos by title
+const searchPhotos = async (req, res) => {
+ const { q } = req.query;
+
+ const photos = await Photo.find({title: new RegExp(q, "i")}).exec();
+
+ res.status(200).json(photos);
+};
+
 module.exports = {
   insertPhoto,
   deletePhoto,
@@ -175,4 +211,6 @@ module.exports = {
   getPhotoById,
   updatePhoto,
   likePhoto,
+  commentPhoto,
+  searchPhotos,
 };
