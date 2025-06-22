@@ -29,6 +29,39 @@ const insertPhoto = async (req, res) => {
   res.status(201).json(newPhoto);
 };
 
+// Remove a photo from DB
+const deletePhoto = async (req, res) => {
+  const { id } = req.params;  
+  const reqUser = req.user;
+
+  try {
+    // Verifica se o ID é válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ errors: ["ID inválido."] });
+    }
+
+    const photo = await Photo.findById(id);
+
+    // Check if photo exists
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada."] });
+    }
+
+    // Check if photo belongs to the user
+    if (!photo.userId.equals(reqUser._id)) {
+      return res.status(403).json({ errors: ["Você não tem permissão para deletar esta foto."] });
+    }
+
+    await Photo.findByIdAndDelete(id);
+
+    res.status(200).json({ id: photo._id, message: "Foto removida com sucesso." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ errors: ["Ocorreu um erro ao tentar deletar a foto."] });
+  }
+};
+
 module.exports = {
   insertPhoto,
+  deletePhoto,
 };
