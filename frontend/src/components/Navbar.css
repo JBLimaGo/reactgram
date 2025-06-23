@@ -1,0 +1,49 @@
+#nav {
+    background-color: #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #363636;
+    padding: 0.1em 1em;
+    margin: 0 auto; /* Centraliza a navbar */
+    padding: 0.5em 2em; /* Aumenta o espaçamento interno */
+    transition: transform 0.3s ease; /* Adiciona uma transição suave */
+}
+
+#search-form{
+   position: relative;
+   width: 20%;
+}
+
+#search-form svg{
+    position: absolute;
+    top: 50%;
+    left: 0.5em;
+}
+
+search-form input {
+    padding-left: 2.5em;
+    width: 250%; /* Aumenta a largura do campo de busca */
+    height: 3em; /* Aumenta a altura do campo de busca */
+    border: none;
+    border-radius: 5px;
+    margin: 0;
+}
+
+#nav-links{
+    display: flex;
+    align-items: center;
+}
+
+#nav-links li {
+    margin-right: 1em; /* Ajusta o espaçamento entre os links */
+    font-size: 1.2em; /* Aumenta o tamanho do texto */
+}
+
+#nav-links span{
+    cursor: pointer;  
+}
+
+#nav-links svg{
+    font-size: 1.5em;
+}

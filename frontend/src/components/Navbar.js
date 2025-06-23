@@ -12,7 +12,12 @@ const Navbar = () => {
         <BsSearch />
         <input type="text" placeholder="Pesquisar..." />
       </form>
-      <ul>
+      <ul id ="nav-links">
+        <li>
+          <NavLink to="/" end>
+            <BsHouseDoorFill /> 
+          </NavLink>
+        </li>
         <li>
           <NavLink to="/login">           
             Entrar
