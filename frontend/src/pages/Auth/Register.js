@@ -2,9 +2,10 @@ import "./Auth.css";
 
 // Components
 import { Link } from "react-router-dom";
+import Message from "../../components/Message";
 
 // Hooks
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Redux
@@ -18,15 +19,13 @@ const Register = () => {
   // const [error, setError] = useState("");
 
   const dispatch = useDispatch();
-  const { user, error, success, loading, message } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, error } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Aqui você pode adicionar a lógica para enviar os dados do formulário
-    const user = {
+    const user = {      
       name,
       email,
       password,
@@ -39,21 +38,9 @@ const Register = () => {
   };
 
    // Clean all auth states
-  useEffect(() => {
+ useEffect(() => {
     dispatch(reset());
-    if (user) {
-      console.log("Usuário registrado com sucesso:", user);
-    } 
-    if (error) {
-      console.error("Erro ao registrar usuário:", error);
-    }
-    if (success) {
-      console.log("Registro bem-sucedido:", message);
-    }
-    if (message) {
-      console.log("Mensagem:", message);
-    }
-  }, [dispatch, user, error, success, message]);
+  }, [dispatch]);
 
   return (
     <div id="register">
@@ -84,7 +71,10 @@ const Register = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           value={confirmPassword || ""}
         />
-        <button type="submit">Cadastrar</button>
+
+        {!loading && <input type="submit" value="Cadastrar" />}
+        {loading && <input type="submit" value="Aguarde..." disabled />}
+        {error && <Message msg={error} type="error" />}
       </form>
       <p>
         Já tem uma conta? <Link to="/login">Clique aqui.</Link>

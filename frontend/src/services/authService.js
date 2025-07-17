@@ -12,6 +12,8 @@ const register = async (user) => {
     if (res) {
       localStorage.setItem("user", JSON.stringify(res));
     }
+    
+    return res;
   } catch (error) {
     console.log(error);
   }
