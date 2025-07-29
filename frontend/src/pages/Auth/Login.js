@@ -9,16 +9,32 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Redux
+import { login, reset } from "../../slices/authSlice";
 
 const Login = () => {
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); 
+  const [password, setPassword] = useState("");
+  
+  const dispatch = useDispatch();
+  const { error, loading } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle login logic here
+
+    const user = {
+      email,
+      password
+    }  
+
+    dispatch(login(user));
   };
+
+  // clean up function
+  useEffect(() => {
+    dispatch(reset());
+  }, dispatch);
 
 
   return (
@@ -27,10 +43,12 @@ const Login = () => {
       <p className="subtitle"></p>
       <p> Faça o login para ver o que há de novo. </p>
       <form onSubmit={ handleSubmit }>
-        <input type="email" placeholder="E-mail" onchange={(e) => setEmail(e.target.value)} value={email || ""}/>
-        <input type="password" placeholder="Senha" onchange={(e) => setPassword(e.target.value)} value={password || ""} />
-        <button type="submit">Entrar</button>
+        <input type="text" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)} value={email || ""}/>
+        <input type="password" placeholder="Senha" onChange={(e) => setPassword(e.target.value)} value={password || ""} />        
        
+        {!loading && <input type="submit" value="Entrar" />}
+        {loading && <input type="submit" value="Aguarde..." disabled />}
+        {error && <Message msg={error} type="error" />}
       </form>
       <p>
         Não tem uma conta? <Link to="/register">Clique aqui.</Link>  

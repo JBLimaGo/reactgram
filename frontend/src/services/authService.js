@@ -9,7 +9,7 @@ const register = async (user) => {
       .then((res) => res.json())
       .catch((err) => err);
 
-    if (res) {
+      if (res._id) {
       localStorage.setItem("user", JSON.stringify(res));
     }
     
@@ -33,7 +33,7 @@ const login = async (user) => {
       .then((res) => res.json())
       .catch((err) => err);
 
-    if (res) {
+    if (res._id) {
       localStorage.setItem("user", JSON.stringify(res));
     }
 
