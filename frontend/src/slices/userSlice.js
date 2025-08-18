@@ -22,10 +22,27 @@ export const profile = createAsyncThunk(
   }
 );
 
+// Update user details
+export const updateProfile = createAsyncThunk(
+  "user/update",
+  async (user, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const data = await userService.updateProfile(user, token);
+    if (data.error) {
+      return thunkAPI.rejectWithValue(data.error[0]);
+    }
+    return data;
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
+  
   reducers: {
+    resetMessage: (state) => {
+      state.message = null;
+    },
     reset: (state) => {
       state.error = false;
       state.loading = false;
@@ -44,9 +61,26 @@ export const userSlice = createSlice({
         state.success = true;
         state.error = null;
         state.user = action.payload;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.user = action.payload;
+        state.message = "Usuário Atualizado com sucesso!";
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.user = {};
+        state.message = action.payload || "Falha ao Atualizar usuário!";
       });
   },
 });
 
-export const { resetMessage } = userSlice.actions;
+export const { reset, resetMessage } = userSlice.actions;
 export default userSlice.reducer;

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Redux
-import { profile, resetMessage } from "../../slices/userSlice";
+import { profile, resetMessage, updateProfile } from "../../slices/userSlice";
 
 // Componentes
 import Message from "../../components/Message";
@@ -21,7 +21,7 @@ const EditProfile = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage, setImageProfile] = useState("");
   const [bio, setBio] = useState("");
   const [previewImage, setPreviewImage] = useState("");
 
@@ -41,10 +41,51 @@ const EditProfile = () => {
 
   console.log("User data:", user);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     // Aqui você pode adicionar a lógica para enviar os dados do formulário
+    // Gather user data from states
+    const userData = {
+      name,
+    };
+
+    if (profileImage) {
+      userData.profileImage = profileImage;
+    }
+
+    if (bio) {
+      userData.bio = bio;
+    }
+
+    if (password) {
+      userData.password = password;
+    }
+
+    // build form data
+    const formData = new FormData();
+
+    const userFormData = Object.keys(userData).forEach((key) =>
+      formData.append(key, userData[key])
+    );
+
+    formData.append("user", userFormData);
+
+    await dispatch(updateProfile(formData));
+
+    setTimeout(() => {
+      dispatch(resetMessage());
+    }, 2000);
+
     console.log("Formulário enviado");
+  };
+
+  const handleFile = (e) => {
+    // Verifica se há uma imagem selecionada
+    const image = e.target.files[0];
+    setPreviewImage(image);
+
+    // update profileImage state
+    setImageProfile(image);
   };
 
   return (
@@ -53,7 +94,17 @@ const EditProfile = () => {
       <p className="subtitle">
         Adicione uma imagem de perfil e conte mais sobre você...
       </p>
-      {/* Formulário de edição de perfil */}
+      {user && (user.profileImage || previewImage) && (
+        <img
+          className="profile-image"
+          src={
+            previewImage
+              ? URL.createObjectURL(previewImage)
+              : `${uploads}/users/${user.profileImage}`
+          }
+          alt={user.name}
+        />
+      )}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -69,10 +120,7 @@ const EditProfile = () => {
         />
         <label>
           <span>Imagem de perfil:</span>
-          <input
-            type="file"
-            onChange={(e) => setProfileImage(e.target.files[0])}
-          />
+          <input type="file" onChange={handleFile} />
         </label>
         <label>
           <span>Sobre você:</span>
@@ -95,6 +143,7 @@ const EditProfile = () => {
         {!loading && <input type="submit" value="Atualizar" />}
         {loading && <input type="submit" value="Aguarde..." disabled />}
         {error && <Message msg={error} type="error" />}
+        {message && <Message msg={message} type="Sucess" />}
       </form>
     </div>
   );
