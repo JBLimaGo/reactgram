@@ -35,6 +35,19 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+// Get user details by ID
+export const getUserDetails = createAsyncThunk(
+  "user/getUserDetails",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    const response = await userService.getUserDetails(id, token);
+    if (response.error) {
+      return thunkAPI.rejectWithValue(response.error);
+    }
+    return response;
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -78,7 +91,17 @@ export const userSlice = createSlice({
         state.error = action.payload;
         state.user = {};
         state.message = action.payload || "Falha ao Atualizar usuário!";
-      });
+      })
+      .addCase(getUserDetails.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.user = action.payload;
+      })
   },
 });
 
