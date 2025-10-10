@@ -53,6 +53,9 @@ const Profile = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState(null);
 
+  const [infoMessage, setInfoMessage] = useState("");
+  const [warningMessage, setWarningMessage] = useState("");
+
   // Modificar handleDelete
   const handleDelete = (id) => {
     setPhotoToDelete(id);
@@ -67,16 +70,16 @@ const Profile = () => {
         await dispatch(getUserPhotos(id));
 
         // Limpar a mensagem após 2 segundos
-      setTimeout(() => {
-        dispatch(resetMessage());
-      }, 2000);
+        setTimeout(() => {
+          dispatch(resetMessage());
+        }, 2000);
       }
     } catch (error) {
       console.error("Erro ao deletar foto:", error);
     }
-  }; 
+  };
 
-/*
+  /*
   const confirmDelete = async () => {
     if (photoToDelete) {
       try {
@@ -95,46 +98,44 @@ const Profile = () => {
 */
 
   // Show or hide edit form
- const hideOrShowForms = () => {
+  const hideOrShowForms = () => {
     newPhotoForm.current.classList.toggle("hide");
     editPhotoForm.current.classList.toggle("hide");
-  }
+  };
 
-   // update photo 
-   const handleUpdate = async (e) => {
-    e.preventDefault();  
-    
+  // update photo
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
     const photoData = {
       id: editId,
-      title: editTitle,      
+      title: editTitle,
     };
 
     const response = await dispatch(updatePhoto(photoData)).unwrap();
 
-  if (response) {
-    // Limpar a mensagem após 2 segundos
-    setTimeout(() => {
-      dispatch(resetMessage());
-    }, 2000);
-  }
-    
-  }
+    if (response) {
+      // Limpar a mensagem após 2 segundos
+      setTimeout(() => {
+        dispatch(resetMessage());
+      }, 2000);
+    }
+  };
 
   // Adicionar as funções de manipulação
   const handleEdit = (photo) => {
     if (editPhotoForm.current.classList.contains("hide")) {
       hideOrShowForms();
-    }    
+    }
 
     setEditId(photo._id);
     setEditImage(photo.image);
-    setEditTitle(photo.title);  
-
+    setEditTitle(photo.title);
   };
 
   const handleCancelEdit = (e) => {
     hideOrShowForms();
-  }
+  };
 
   // Load user data
   useEffect(() => {
@@ -176,13 +177,14 @@ const Profile = () => {
 
     setTimeout(() => {
       dispatch(resetMessage());
-    }, 2000);
-  };  
+      setInfoMessage("");
+      setWarningMessage("");
+    }, 3000);
+  };
 
   if (loading) {
     return <p>Carregando...</p>;
   }
-  
 
   return (
     <div id="profile">
@@ -227,31 +229,39 @@ const Profile = () => {
               )}
             </form>
           </div>
-          <div className="edit-photo hide" ref={editPhotoForm} >
+          <div className="edit-photo hide" ref={editPhotoForm}>
             <p>Editando:</p>
             {editImage && (
               <img
-                src={`${uploads}/photos/${editImage}`}  
+                src={`${uploads}/photos/${editImage}`}
                 alt={editTitle}
                 style={{ width: "100%", marginBottom: "1em" }}
               />
             )}
             <form onSubmit={handleUpdate}>
-              
-                <input  
-                  type="Text"
-                  placeholder="Insira um novo título"
-                  onChange={(e) => setEditTitle(e.target.value)}  
-                  value={editTitle || ""}
-                />
-                           
-              <input type="submit" value="Atualizar" /> 
-              <button className="cancel-btn" onClick={handleCancelEdit}> Cancelar Edição </button> 
-            </form>           
+              <input
+                type="Text"
+                placeholder="Insira um novo título"
+                onChange={(e) => setEditTitle(e.target.value)}
+                value={editTitle || ""}
+              />
+
+              <input type="submit" value="Atualizar" />
+              <button className="cancel-btn" onClick={handleCancelEdit}>
+                {" "}
+                Cancelar Edição{" "}
+              </button>
+            </form>
           </div>
 
-          {errorPhoto && <Message msg={errorPhoto} type="error" />}
-          {messagePhoto && <Message msg={messagePhoto} type="success" />}
+          {/* Mensagens de feedback */}
+          <div className="messages-container">
+            {errorPhoto && <Message msg={errorPhoto} type="error" />}
+          </div>
+          {/* Mensagens de feedback */}
+          <div className="message-success">
+            {messagePhoto && <Message msg={messagePhoto} type="success" />}
+          </div>
         </>
       )}
       <div className="user-photos">

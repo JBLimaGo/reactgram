@@ -1,21 +1,104 @@
-.message{
-    border-radius: 5px;
-    padding: 5px 10px;
-    margin: 0;
+:root {
+    /* Cores para mensagens */
+    --error-bg: #ff4444;
+    --error-text: #ffffff;
+    --success-bg: #00c851;
+    --success-text: #ffffff;
+    --info-bg: #33b5e5;
+    --info-text: #ffffff;
+    --warning-bg: #ffbb33;
+    --warning-text: #ffffff;
+  
+    /* Sombras e efeitos */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+    /* Transições */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+  }
+  
+  .message {
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #000
-}
-
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-color: #f5c6cb;
-}
-
-.message.sucess {
-    background-color: #155724;
-    color: #d4edda;
-    border-color: #c3e6cb;
-}
+    gap: 0.5rem;
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    animation: slideIn 0.3s ease;
+  }
+  
+  .message:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .message.error {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border-left: 4px solid #cc0000;
+  }
+  
+  .message.success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border-left: 4px solid #007e33;
+  }
+  
+  .message.info {
+    background-color: var(--info-bg);
+    color: var(--info-text);
+    border-left: 4px solid #0099cc;
+  }
+  
+  .message.warning {
+    background-color: var(--warning-bg);
+    color: var(--warning-text);
+    border-left: 4px solid #ff8800;
+  }
+  
+  /* Ícones das mensagens */
+  .message svg {
+    font-size: 1.2rem;
+  }
+  
+  /* Animação de entrada */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Animação de saída */
+  .message.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .message {
+      padding: 0.8rem 1rem;
+      margin: 0.8rem 0;
+      font-size: 0.9rem;
+    }
+  }

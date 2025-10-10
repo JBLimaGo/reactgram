@@ -25,7 +25,7 @@ const Register = () => {
     e.preventDefault();
 
     // Aqui você pode adicionar a lógica para enviar os dados do formulário
-    const user = {      
+    const user = {
       name,
       email,
       password,
@@ -37,8 +37,8 @@ const Register = () => {
     dispatch(register(user));
   };
 
-   // Clean all auth states
- useEffect(() => {
+  // Clean all auth states
+  useEffect(() => {
     dispatch(reset());
   }, [dispatch]);
 
@@ -74,7 +74,11 @@ const Register = () => {
 
         {!loading && <input type="submit" value="Cadastrar" />}
         {loading && <input type="submit" value="Aguarde..." disabled />}
-        {error && <Message msg={error} type="error" />}
+
+        {/* Mensagens de feedback */}
+        <div className="messages-container">
+          {error && <Message msg={error} type="error" />}
+        </div>
       </form>
       <p>
         Já tem uma conta? <Link to="/login">Clique aqui.</Link>

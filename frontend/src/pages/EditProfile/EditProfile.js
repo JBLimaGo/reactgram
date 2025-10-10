@@ -74,7 +74,7 @@ const EditProfile = () => {
 
     setTimeout(() => {
       dispatch(resetMessage());
-    }, 2000);
+    }, 3000);
 
     console.log("Formulário enviado");
   };
@@ -142,8 +142,16 @@ const EditProfile = () => {
         </label>
         {!loading && <input type="submit" value="Atualizar" />}
         {loading && <input type="submit" value="Aguarde..." disabled />}
-        {error && <Message msg={error} type="error" />}
-        {message && <Message msg={message} type="Sucess" />}
+
+        {/* Mensagens de feedback */}
+        <div className="messages-container">
+          {error && <Message msg={error} type="error" />}
+        </div>
+
+        {/* Mensagens de feedback */}
+        <div className="message-success">
+          {message && <Message msg={message} type="Sucess" />}
+        </div>
       </form>
     </div>
   );
