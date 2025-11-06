@@ -211,7 +211,7 @@ const Profile = () => {
             <h3>Compartilhe algum momento seu:</h3>
             <form onSubmit={submitHandler}>
               <label>
-                <span>Título para a foto:</span>
+                <span>Título da foto:</span>
                 <input
                   type="Text"
                   placeholder="Insira um título"
@@ -220,7 +220,7 @@ const Profile = () => {
                 />
               </label>
               <label>
-                <span>Imagem:</span>
+                <span>Foto:</span>
                 <input type="file" onChange={handleFile} />
               </label>
               {!loadingPhoto && <input type="submit" value="Postar" />}

@@ -132,7 +132,7 @@ const EditProfile = () => {
           />
         </label>
         <label>
-          <span>Senha para alterar:</span>
+          <span>Alterar Senha:</span>
           <input
             type="password"
             placeholder="Digite sua nova senha"

@@ -153,14 +153,20 @@ const likePhoto = async (req, res) => {
       return res.status(404).json({ errors: ["Foto não encontrada."] });
     }
 
-    if (photo.likes.includes(reqUser._id)) {
-      return res.status(400).json({ errors: ["Você já curtiu esta foto."] });
+    // Check if user already liked the photo
+    const likeIndex = photo.likes.indexOf(reqUser._id);
+    
+    if (likeIndex > -1) {
+      // Unlike: remove the like
+      photo.likes.splice(likeIndex, 1);
+      await photo.save();
+      return res.status(200).json({ photoId: id, likes: photo.likes, userId: reqUser._id, message: "Curtida removida com sucesso." });
+    } else {
+      // Like: add the like
+      photo.likes.push(reqUser._id);
+      await photo.save();
+      return res.status(200).json({ photoId: id, likes: photo.likes, userId: reqUser._id, message: "A Foto foi curtida com sucesso." });
     }
-
-    photo.likes.push(reqUser._id);
-    await photo.save();
-
-    res.status(200).json({ photoId: id , userId: reqUser._id, message: " A Foto foi curtida com sucesso." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ errors: ["Erro ao curtir a foto."] });
@@ -191,8 +197,79 @@ const commentPhoto = async (req, res) => {
 
   photo.comments.push(userComment);
   await photo.save();
-  res.status(200).json({ photoId: id, comment: userComment, message: "Comentário adicionado com sucesso." });
+  res.status(200).json({ photo: photo, comment: userComment, message: "Comentário adicionado com sucesso." });
 }
+
+// Delete a comment
+const deleteComment = async (req, res) => {
+  const { id, commentId } = req.params;
+  const reqUser = req.user;
+
+  try {
+    const photo = await Photo.findById(id);
+
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada."] });
+    }
+
+    const commentIndex = photo.comments.findIndex(
+      (comment) => String(comment._id) === commentId
+    );
+
+    if (commentIndex === -1) {
+      return res.status(404).json({ errors: ["Comentário não encontrado."] });
+    }
+
+    // Check if the comment belongs to the user
+    if (!photo.comments[commentIndex].userId.equals(reqUser._id)) {
+      return res.status(403).json({ errors: ["Você não tem permissão para deletar este comentário."] });
+    }
+
+    photo.comments.splice(commentIndex, 1);
+    await photo.save();
+
+    res.status(200).json({ photo: photo, message: "Comentário removido com sucesso." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errors: ["Erro ao deletar comentário."] });
+  }
+};
+
+// Update a comment
+const updateComment = async (req, res) => {
+  const { id, commentId } = req.params;
+  const { comment } = req.body;
+  const reqUser = req.user;
+
+  try {
+    const photo = await Photo.findById(id);
+
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada."] });
+    }
+
+    const commentIndex = photo.comments.findIndex(
+      (c) => String(c._id) === commentId
+    );
+
+    if (commentIndex === -1) {
+      return res.status(404).json({ errors: ["Comentário não encontrado."] });
+    }
+
+    // Check if the comment belongs to the user
+    if (!photo.comments[commentIndex].userId.equals(reqUser._id)) {
+      return res.status(403).json({ errors: ["Você não tem permissão para editar este comentário."] });
+    }
+
+    photo.comments[commentIndex].comment = comment;
+    await photo.save();
+
+    res.status(200).json({ photo: photo, message: "Comentário atualizado com sucesso." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ errors: ["Erro ao atualizar comentário."] });
+  }
+};
 
 // Search photos by title
 const searchPhotos = async (req, res) => {
@@ -212,5 +289,7 @@ module.exports = {
   updatePhoto,
   likePhoto,
   commentPhoto,
+  deleteComment,
+  updateComment,
   searchPhotos,
 };

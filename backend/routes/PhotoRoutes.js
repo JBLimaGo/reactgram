@@ -11,6 +11,8 @@ const {
   updatePhoto,
   likePhoto,
   commentPhoto,
+  deleteComment,
+  updateComment,
   searchPhotos,
 } = require('../controllers/PhotoController');
 
@@ -39,6 +41,8 @@ router.get("/:id", authGuard, getPhotoById); // Assuming getPhotoById is defined
 router.put("/:id", authGuard, photoUpdateValidation(), validate, updatePhoto); // Assuming updatePhoto is defined in PhotoController
 router.put("/like/:id", authGuard, likePhoto); // Assuming likePhoto is defined in PhotoController
 router.put("/coment/:id", authGuard, commentValidation(), validate, commentPhoto); // Assuming commentPhoto is defined in PhotoController
+router.delete("/:id/comment/:commentId", authGuard, deleteComment);
+router.put("/:id/comment/:commentId", authGuard, commentValidation(), validate, updateComment);
 
 
 module.exports = router;
