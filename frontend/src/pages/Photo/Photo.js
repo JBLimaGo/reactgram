@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // Redux
-import { getPhoto, likePhoto, commentPhoto, deleteComment, updateComment } from "../../slices/photoSlice";
+import { getPhoto, likePhoto, commentPhoto, deleteComment, updateComment, resetMessage } from "../../slices/photoSlice";
 
 const Photo = () => {
   const { id } = useParams();
@@ -30,6 +30,11 @@ const Photo = () => {
   useEffect(() => {
     dispatch(getPhoto(id));
   }, [dispatch, id]);
+
+  // Limpar mensagens ao montar o componente
+  useEffect(() => {
+    dispatch(resetMessage());
+  }, [dispatch]);
 
   // Like a photo
   const handleLike = () => {

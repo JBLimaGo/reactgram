@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Redux
-import { getPhotos, likePhoto, commentPhoto } from "../../slices/photoSlice";
+import { getPhotos, likePhoto, commentPhoto, resetMessage } from "../../slices/photoSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -27,6 +27,11 @@ const Home = () => {
   // Load all photos
   useEffect(() => {
     dispatch(getPhotos());
+  }, [dispatch]);
+
+  // Limpar mensagens ao montar o componente
+  useEffect(() => {
+    dispatch(resetMessage());
   }, [dispatch]);
 
   // Atualizar fotos exibidas quando photos mudar

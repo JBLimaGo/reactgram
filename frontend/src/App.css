@@ -1,3 +1,94 @@
-.container{
-   min-height: 70vh;
+.container {
+  min-height: 70vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Efeito de brilho sutil no topo da página */
+.app-glow {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 200px;
+  background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Partículas decorativas flutuantes */
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.3;
+  animation: float 20s infinite ease-in-out;
+  z-index: 0;
+}
+
+.particle-1 {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent);
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.particle-2 {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(118, 75, 162, 0.15), transparent);
+  top: 60%;
+  right: 15%;
+  animation-delay: -5s;
+}
+
+.particle-3 {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(79, 172, 254, 0.2), transparent);
+  bottom: 20%;
+  left: 20%;
+  animation-delay: -10s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-30px) translateX(20px);
+  }
+  50% {
+    transform: translateY(-60px) translateX(-20px);
+  }
+  75% {
+    transform: translateY(-30px) translateX(-40px);
+  }
+}
+
+/* Responsividade para partículas */
+@media (max-width: 768px) {
+  .particle {
+    display: none;
+  }
+  
+  .app-glow {
+    width: 100%;
+    height: 150px;
+  }
 }

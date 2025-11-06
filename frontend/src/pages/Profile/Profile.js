@@ -143,6 +143,11 @@ const Profile = () => {
     dispatch(getUserPhotos(id));
   }, [dispatch, id]);
 
+  // Limpar mensagens ao montar o componente
+  useEffect(() => {
+    dispatch(resetMessage());
+  }, [dispatch]);
+
   const handleFile = (e) => {
     // Verifica se há uma imagem selecionada
     const image = e.target.files[0];
