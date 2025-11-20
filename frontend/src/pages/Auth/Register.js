@@ -44,7 +44,7 @@ const Register = () => {
 
   return (
     <div id="register">
-      <h2>ReactGram</h2>
+      <h2>ReactGram - Rede Social Full Stack</h2>
       <p>Cadastre-se para ver fotos e vídeos dos seus amigos.</p>
       <form onSubmit={handleSubmit}>
         <input

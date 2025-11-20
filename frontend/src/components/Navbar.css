@@ -1,6 +1,9 @@
+/* ========================================
+   VARIÁVEIS CSS
+   ======================================== */
 :root {
   /* Cores modernas e vibrantes */
-  --nav-bg: #4a90e2; /* Azul moderno */
+  --nav-bg: #4a90e2;
   --nav-border: rgba(255, 255, 255, 0.1);
   --nav-text: #ffffff;
   --nav-hover: #64b5f6;
@@ -11,6 +14,9 @@
   --transition-normal: 0.3s ease;
 }
 
+/* ========================================
+   NAVBAR PRINCIPAL
+   ======================================== */
 #nav {
   background: linear-gradient(to right, #4a90e2, #357abd);
   display: flex;
@@ -25,14 +31,17 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* ========================================
+   FORMULÁRIO DE BUSCA
+   ======================================== */
 #search-form {
   position: relative;
-  width: 300px;
+  width: 220px;
   transition: width var(--transition-normal);
 }
 
 #search-form:focus-within {
-  width: 350px;
+  width: 280px;
 }
 
 #search-form svg {
@@ -61,6 +70,9 @@
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
+/* ========================================
+   LINKS DE NAVEGAÇÃO
+   ======================================== */
 #nav-links {
   display: flex;
   align-items: center;
@@ -91,29 +103,39 @@
   transform: scale(1.1);
 }
 
-/* Animação para notificações */
+/* ========================================
+   ANIMAÇÕES
+   ======================================== */
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .notification-active {
   animation: pulse 2s infinite;
 }
 
-/* Media Queries */
+/* ========================================
+   MEDIA QUERIES - TABLET
+   ======================================== */
 @media (max-width: 768px) {
   #nav {
     padding: 0.8rem 1rem;
   }
 
   #search-form {
-    width: 200px;
+    width: 160px;
   }
 
   #search-form:focus-within {
-    width: 240px;
+    width: 200px;
   }
 
   #nav-links {
@@ -129,6 +151,9 @@
   }
 }
 
+/* ========================================
+   MEDIA QUERIES - MOBILE
+   ======================================== */
 @media (max-width: 480px) {
   #search-form {
     display: none;

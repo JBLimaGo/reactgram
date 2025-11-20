@@ -39,7 +39,7 @@ const Login = () => {
 
   return (
     <div id="login">
-      <h2>ReactGram</h2>
+      <h2>ReactGram - Rede Social Full Stack</h2>
       <p className="subtitle"></p>
       <p> Faça o login para ver o que há de novo. </p>
       <form onSubmit={ handleSubmit }>

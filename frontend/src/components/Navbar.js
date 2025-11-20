@@ -37,7 +37,7 @@ const Navbar = () => {
 
   return (
     <nav id="nav">
-      <Link to="/"> ReactGram </Link>
+      <Link to="/">ReactGram - Rede Social Full Stack </Link>
       <form id="search-form">
         <BsSearch />
         <input type="text" placeholder="Pesquisar..." />
